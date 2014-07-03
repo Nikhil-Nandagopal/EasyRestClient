@@ -18,7 +18,7 @@ public class EasyJsonServiceRequest extends EasyServiceRequest {
     private Request request;
     
     public EasyJsonServiceRequest(Request request, RequestMethod requestMethod, Context context) {
-        super(requestMethod, "application/sjon");
+        super(requestMethod, "application/json");
         this.request = request;
     }
 
@@ -33,8 +33,8 @@ public class EasyJsonServiceRequest extends EasyServiceRequest {
             else
                 requestString = this.HTTP_METHOD;
             requestString += this.url+"/"+this.path+"/"+this.method;
-            if(request.getRequestParams() != null) {
-                requestString += EasyCommonUtils.buildEncodedQueryString(request.getRequestParams());
+            if(request.getUrlRequestParams() != null) {
+                requestString += EasyCommonUtils.buildEncodedQueryString(request.getUrlRequestParams());
             }
             return getHttpRequest(requestString, jsonEntity);
         } catch (UnsupportedEncodingException e) {

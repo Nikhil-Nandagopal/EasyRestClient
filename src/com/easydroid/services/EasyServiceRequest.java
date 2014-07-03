@@ -1,21 +1,25 @@
 package com.easydroid.services;
 
+import java.io.IOException;
+
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 
+import android.util.Log;
+
 import com.easydroid.domains.HttpDeleteWithBody;
 import com.easydroid.domains.ResponseContainer;
+import com.easydroid.utils.EasyCommonUtils;
 import com.easydroid.utils.EasyDroid;
 import com.easydroid.utils.RequestMethod;
 import com.easydroid.utils.ResponseFormat;
 
 public abstract class EasyServiceRequest {
 
+    protected final String TAG = getClass().getName();
     protected final String HTTP_METHOD = "http://";
     protected final String SECURE_HTTP_METHOD = "https://";
     protected String url;
@@ -26,7 +30,7 @@ public abstract class EasyServiceRequest {
     protected int requestCode;
     protected int connectionTimeout;
     protected RequestMethod requestMethod;
-    protected Class<? extends ResponseContainer> responsibleClass;
+    protected Class<? extends ResponseContainer> responsibleClass = ResponseContainer.class;
     protected ResponseFormat responseFormat = ResponseFormat.JSON;
 
     public EasyServiceRequest(RequestMethod requestMethod, String contentType) {
@@ -35,7 +39,7 @@ public abstract class EasyServiceRequest {
         this.requestMethod = requestMethod;
         this.contentType = contentType;
     }
-    
+
     public EasyServiceRequest(RequestMethod requestMethod) {
         this.url = EasyDroid.BASE_URL;
         this.connectionTimeout = EasyRestClient.MAX_CONNECTION_TIMEOUT;
@@ -43,28 +47,13 @@ public abstract class EasyServiceRequest {
     }
 
     private EasyServiceRequest() {
-        
+
     }
-    
+
     public abstract HttpRequestBase createHttpRequest();
 
     public RequestMethod getRequestMethod() {
         return requestMethod;
-    }
-
-    public HttpRequestBase getHttpRequest(String uri) {
-        switch (requestMethod) {
-        case GET:
-            return new HttpGet(uri);
-        case POST:
-            return new HttpPost(uri);
-        case PUT:
-            return new HttpPut(url);
-        case DELETE:
-            return new HttpDelete(uri);
-        default:
-            return null;
-        }
     }
 
     public HttpRequestBase getHttpRequest(String uri, HttpEntity httpEntity) {
@@ -84,6 +73,17 @@ public abstract class EasyServiceRequest {
         }
         httpEntityEnclosingBaseRequest.addHeader("content-type", contentType);
         httpEntityEnclosingBaseRequest.setEntity(httpEntity);
+//        if(EasyDroid.enableLogging) {
+//            try {
+//                Log.d(TAG, EasyCommonUtils.convertStreamToString(httpEntity.getContent()));
+//            } catch (IllegalStateException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        }
         return httpEntityEnclosingBaseRequest;
     }
 

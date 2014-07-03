@@ -28,8 +28,8 @@ public class EasyMultiPartServiceRequest extends EasyServiceRequest {
         else
             requestString = this.HTTP_METHOD;
         requestString += this.url+"/"+this.path+"/"+this.method;
-        if(request.getRequestParams() != null) {
-            requestString += EasyCommonUtils.buildEncodedQueryString(request.getRequestParams());
+        if(request.getUrlRequestParams() != null) {
+            requestString += EasyCommonUtils.buildEncodedQueryString(request.getUrlRequestParams());
         }
         return getHttpRequest(requestString, multiPartEntity);
     }

@@ -90,11 +90,7 @@ public class EasyServiceThread extends AsyncTask<EasyServiceRequest, Void, Respo
     @Override
     protected void onCancelled() {
         super.onCancelled();
-        try {
-            abortThread();
-        } catch(Exception e) {
-
-        }
+        abortThread();
         if (showProgressDialog && progressDialog != null && progressDialog.isShowing()) {
             progressDialog.cancel();
             showProgressDialog = false;
@@ -102,8 +98,12 @@ public class EasyServiceThread extends AsyncTask<EasyServiceRequest, Void, Respo
     }
 
     public void abortThread() {
-        if(easyRestClient != null)
-            easyRestClient.abortHttpClient();
+        try {
+            if(easyRestClient != null)
+                easyRestClient.abortHttpClient();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -121,10 +121,11 @@ public class EasyServiceThread extends AsyncTask<EasyServiceRequest, Void, Respo
                 rawResponseContainer.setInputStream(inputStream);
                 responseContainer = rawResponseContainer;
             }
+            responseContainer.setResponseCode(easyRestClient.getHttpResponseCode());
         } catch (ConnectTimeoutException e) {
+            e.printStackTrace();
             responseContainer = new ResponseContainer();
             responseContainer.setResponseCode(ResponseCodes.CONNECTION_TIMEOUT);
-            e.printStackTrace();
         } catch (JsonParseException e) {
             e.printStackTrace();
             responseContainer = new ResponseContainer();
@@ -139,19 +140,15 @@ public class EasyServiceThread extends AsyncTask<EasyServiceRequest, Void, Respo
 
     @Override
     protected void onPostExecute(ResponseContainer responseContainer) {
-        try{
-            if(showProgressDialog) {
-                progressDialog.cancel();
-                showProgressDialog = false;
-            }
-            super.onPostExecute(responseContainer);
-            if(responseContainer.getResponseCode().getResponseValue() == ResponseCodes.OK.getResponseValue()) { 
-                onEasyServiceCompleteListener.onEasyServiceSuccess(responseContainer, requestCode);
-            } else
-                onEasyServiceCompleteListener.onEasyServiceError(responseContainer, requestCode);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(showProgressDialog) {
+            progressDialog.cancel();
+            showProgressDialog = false;
         }
+        super.onPostExecute(responseContainer);
+        if(responseContainer.getResponseCode().getResponseValue() == ResponseCodes.OK.getResponseValue()) { 
+            onEasyServiceCompleteListener.onEasyServiceSuccess(responseContainer, requestCode);
+        } else
+            onEasyServiceCompleteListener.onEasyServiceError(responseContainer, requestCode);
     }
 
 }

@@ -19,6 +19,10 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.easydroid.utils.EasyDroid;
+import com.easydroid.utils.ResponseCodes;
 
 public class EasyRestClient {
 
@@ -26,6 +30,7 @@ public class EasyRestClient {
     private EasyServiceRequest easyServiceRequest;
     private HttpParams httpParameters;
     private HttpRequestBase httpRequest;
+    private HttpResponse httpResponse;
     private Context context;
     public static final int MAX_CONNECTIONS = 10;
     public static final int MAX_CONNECTIONS_PERROUTE = 1;
@@ -48,10 +53,17 @@ public class EasyRestClient {
 
     public InputStream execute() throws ClientProtocolException, IOException {
         this.httpRequest = easyServiceRequest.createHttpRequest();
+        if(EasyDroid.enableLogging)
+            Log.d(TAG, this.httpRequest.getURI().toString());
         return getInputStream(getSecuredHttpClient().execute(this.httpRequest));
     }
 
+    public ResponseCodes getHttpResponseCode() {
+        return ResponseCodes.getEnum(httpResponse.getStatusLine().getStatusCode());
+    }
+    
     private InputStream getInputStream(HttpResponse httpResponse) {
+        this.httpResponse = httpResponse;
         HttpEntity entity = httpResponse.getEntity();
         if (entity != null) {
             try {
@@ -74,7 +86,7 @@ public class EasyRestClient {
     }
 
     private HttpClient getSecuredHttpClient() {
-        if(easyServiceRequest.isSecureConnectionRequest)
+        if(easyServiceRequest.isSecureConnectionRequest && EasyDroid.BOUNCY_CASTLE_KEYSTORE_ID != 0)
             return new EasySecureHttpClient(context);
         else
             return new DefaultHttpClient(httpParameters);

@@ -4,11 +4,12 @@ package com.easydroid.utils;
 public enum ResponseCodes {
 
 	OK(200),
-	CONNECTION_TIMEOUT(100),
+	CONNECTION_TIMEOUT(50),
 	UNKNOWN(500),
-	MANUALLY_CANCELLED(300),
-    JSON_PARSE_EXCEPTION(301),
-    IO_EXCEPTION(302);
+	NOT_FOUND(404),
+	MANUALLY_CANCELLED(51),
+    JSON_PARSE_EXCEPTION(52),
+    IO_EXCEPTION(53);
 	
 	private int value;
 

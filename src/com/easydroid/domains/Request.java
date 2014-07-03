@@ -8,14 +8,14 @@ import android.os.Parcelable;
 
 public class Request implements Parcelable {
 
-	protected transient HashMap<String, String> requestParams;
+	protected transient HashMap<String, String> urlRequestParams;
 
-	public HashMap<String, String> getRequestParams() {
-		return requestParams;
+	public HashMap<String, String> getUrlRequestParams() {
+		return urlRequestParams;
 	}
 
-	public void setRequestParams(HashMap<String, String> requestParams) {
-		this.requestParams = requestParams;
+	public void setUrlRequestParams(HashMap<String, String> requestParams) {
+		this.urlRequestParams = requestParams;
 	}
 
 	@Override
@@ -25,10 +25,10 @@ public class Request implements Parcelable {
 	}
 
 	public void writeToParcel(Parcel dest, int parcelableFlags) {
-		final int N = requestParams.size();
+		final int N = urlRequestParams.size();
 		dest.writeInt(N);
 		if (N > 0) {
-			for (Map.Entry<String, String> entry : requestParams.entrySet()) {
+			for (Map.Entry<String, String> entry : urlRequestParams.entrySet()) {
 				dest.writeString(entry.getKey());
 				dest.writeString(entry.getValue());
 			}
@@ -45,19 +45,23 @@ public class Request implements Parcelable {
 	};
 
 	private Request(Parcel source) {
-		requestParams = new HashMap<String, String>();
+		urlRequestParams = new HashMap<String, String>();
 		final int N = source.readInt();
 
 		for (int i = 0; i < N; i++) {
 			String key = source.readString();
 			String val = source.readString();
-			requestParams.put(key, val);
+			urlRequestParams.put(key, val);
 		}
 	}
 
 	public Request(HashMap<String, String> requestParams) {
 		// TODO Auto-generated constructor stub
-	    this.requestParams = requestParams;
+	    this.urlRequestParams = requestParams;
 	}
+	
+	public Request() {
+        // TODO Auto-generated constructor stub
+    }
 
 }

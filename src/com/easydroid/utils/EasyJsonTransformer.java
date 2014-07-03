@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
 
+import android.util.Log;
+
 import com.easydroid.domains.ResponseContainer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 
 public class EasyJsonTransformer {
 	
@@ -29,17 +32,21 @@ public class EasyJsonTransformer {
 		return newGson(gsonType).toJson(obj);
 	}
 	
-	public static ResponseContainer parseJson(InputStream responseStream, Class<? extends ResponseContainer> responsibleClass) throws IOException {
+	public static ResponseContainer parseJson(InputStream responseStream, Class<? extends ResponseContainer> responsibleClass) throws IOException, JsonParseException {
         ResponseContainer mResponse = null;
         try {
             String responseString = EasyCommonUtils.convertStreamToString(responseStream);
+            if(EasyDroid.enableLogging)
+                Log.d(EasyJsonTransformer.class.getName(), responseString);
             Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
             mResponse = gson.fromJson(responseString, responsibleClass);
             responseStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            return mResponse;
+        } catch (JsonParseException e) {
+            throw e;
+        } catch (IOException e) {
+            throw e;
         }
-        return mResponse;
     }
 
 }

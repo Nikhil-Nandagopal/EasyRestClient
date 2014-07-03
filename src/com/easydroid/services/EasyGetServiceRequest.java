@@ -23,7 +23,6 @@ public class EasyGetServiceRequest extends EasyServiceRequest {
         return requestParams;
     }
 
-
     public void setRequestParams(HashMap<String, String> requestParams) {
         this.requestParams = requestParams;
     }
@@ -32,9 +31,9 @@ public class EasyGetServiceRequest extends EasyServiceRequest {
     public HttpRequestBase createHttpRequest() {
         // TODO Auto-generated method stub
         if(isSecureConnectionRequest)
-            return new HttpGet(this.SECURE_HTTP_METHOD+this.url+"/"+this.path+"/"+this.method+"/"+EasyCommonUtils.buildEncodedQueryString(requestParams));
+            return new HttpGet(this.SECURE_HTTP_METHOD+this.url+"/"+this.path+"/"+this.method+EasyCommonUtils.buildEncodedQueryString(requestParams));
         else
-            return new HttpGet(this.HTTP_METHOD+this.url+"/"+this.path+"/"+this.method+"/"+EasyCommonUtils.buildEncodedQueryString(requestParams));
+            return new HttpGet(this.HTTP_METHOD+this.url+"/"+this.path+"/"+this.method+EasyCommonUtils.buildEncodedQueryString(requestParams));
     }
 
 }
