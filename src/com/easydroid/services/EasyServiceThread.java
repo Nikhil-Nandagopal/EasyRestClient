@@ -35,6 +35,7 @@ public class EasyServiceThread extends AsyncTask<EasyServiceRequest, Void, Respo
         public void onCancel(DialogInterface arg0) {
             // TODO Auto-generated method stub
             EasyServiceThread.this.cancel(true);
+            abortThread();
         }
     };
 

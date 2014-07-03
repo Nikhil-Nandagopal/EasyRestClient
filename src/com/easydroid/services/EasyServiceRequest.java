@@ -71,19 +71,22 @@ public abstract class EasyServiceRequest {
         default:
             return httpEntityEnclosingBaseRequest;
         }
-        httpEntityEnclosingBaseRequest.addHeader("content-type", contentType);
+        if(contentType != null)
+            httpEntityEnclosingBaseRequest.addHeader("content-type", contentType);
         httpEntityEnclosingBaseRequest.setEntity(httpEntity);
-//        if(EasyDroid.enableLogging) {
-//            try {
-//                Log.d(TAG, EasyCommonUtils.convertStreamToString(httpEntity.getContent()));
-//            } catch (IllegalStateException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        }
+        if(EasyDroid.enableLogging) {
+            try {
+                Log.d(TAG, EasyCommonUtils.convertStreamToString(httpEntity.getContent()));
+            } catch (IllegalStateException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (UnsupportedOperationException e) {
+                e.printStackTrace();
+            }
+        }
         return httpEntityEnclosingBaseRequest;
     }
 
