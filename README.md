@@ -1,8 +1,9 @@
-EasyDroid
+EasyRestClient
 =========
 
-The goal of easy service requests is to enable developers to easily make http requests.
-Here are some of the features that Easy Service Requests provide :
+The goal of EasyRestClient is to enable developers to easily make http requests.
+Here are some of the features that EasyRestClient provides :
+
 * Standardized mechanism to make service calls and receive the responses
 * Supports Delete requests with an entity
 * Supports Multiple request formats i.e Json, FormData, MultiPart
