@@ -9,7 +9,7 @@ Here are some of the features that EasyRestClient provides :
 * Supports Multiple request formats i.e Json, FormData, MultiPart
 * Supports Easy secure connections with self signed certificates using Bouncy Castle Keystore 
 * Extensive logging of requests and responses as well as informative error responses
-* Ease of control over http connection timeouts.
+* Ease of control over http connection parameters.
 
 All Requests follow a common set of steps
 
