@@ -28,7 +28,7 @@ The binding must be added inside quotes for it to be a valid JSON in the post bo
 {
   "title": "{{offerTitleInput.text}}",
   "offerType": "{{offerTypeDropdown.selectedOptionValue}}",
-  "startDate": "{{moment(startDatepicker.selectedDate).format('YYYY-MM-DD')}}"
+  "startDate": "{{startDatepicker.selectedDate}}"
 }
 ```
 
